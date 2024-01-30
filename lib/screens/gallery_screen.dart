@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 class GalleryScreen extends StatefulWidget {
   @override
@@ -8,36 +10,79 @@ class GalleryScreen extends StatefulWidget {
 
 class _GalleryScreenState extends State<GalleryScreen> {
   late List<String> images;
-  int currentZoomLevel = 0;
+  late ScrollController scrollController;
 
   @override
   void initState() {
     super.initState();
-    // Dummy image URLs
-    images = List.generate(16, (index) => 'https://picsum.photos/id/$index/200/300');
+    scrollController = ScrollController();
+    images = List.generate(16, (index) => 'https://picsum.photos/id/$index/800/1200'); // Higher resolution
+    scrollController.addListener(() {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+        loadImages();
+      }
+    });
+  }
+
+  void loadImages() {
+    List<String> additionalImages = List.generate(16, (index) => 'https://picsum.photos/id/${images.length + index}/800/1200');
+    setState(() {
+      images.addAll(additionalImages);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Image Gallery')),
-      body: GestureDetector(
-        onScaleUpdate: (ScaleUpdateDetails details) {
-          setState(() {
-            // Adjusting zoom level based on scaling
-            currentZoomLevel = details.scale.toInt();
-          });
+      body: StaggeredGridView.countBuilder(
+        controller: scrollController,
+        crossAxisCount: 4,
+        itemCount: images.length,
+        itemBuilder: (BuildContext context, int index) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FullScreenGallery(images: images, initialIndex: index),
+                ),
+              );
+            },
+            child: Image.network(images[index], fit: BoxFit.cover),
+          );
         },
-        child: StaggeredGridView.countBuilder(
-          crossAxisCount: 4,
-          itemCount: images.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Image.network(images[index], fit: BoxFit.cover);
-          },
-          staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
-          mainAxisSpacing: 4.0,
-          crossAxisSpacing: 4.0,
+        staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+        mainAxisSpacing: 4.0,
+        crossAxisSpacing: 4.0,
+      ),
+    );
+  }
+}
+
+class FullScreenGallery extends StatelessWidget {
+  final List<String> images;
+  final int initialIndex;
+
+  FullScreenGallery({required this.images, required this.initialIndex});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: PhotoViewGallery.builder(
+        itemCount: images.length,
+        builder: (context, index) {
+          return PhotoViewGalleryPageOptions(
+            imageProvider: NetworkImage(images[index]),
+            minScale: PhotoViewComputedScale.contained,
+            maxScale: PhotoViewComputedScale.covered * 2,
+          );
+        },
+        scrollPhysics: BouncingScrollPhysics(),
+        backgroundDecoration: BoxDecoration(
+          color: Colors.black,
         ),
+        pageController: PageController(initialPage: initialIndex),
       ),
     );
   }
