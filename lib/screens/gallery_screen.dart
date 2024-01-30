@@ -41,13 +41,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Image Gallery')),
-      body: StaggeredGridView.builder(
+      body: GridView.builder(
         controller: scrollController,
-        gridDelegate: SliverStaggeredGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Adjust as needed for full-screen display
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 4,
           crossAxisSpacing: 4.0,
           mainAxisSpacing: 4.0,
-          staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
         ),
         itemCount: images?.length ?? 0,
         itemBuilder: (BuildContext context, int index) {
