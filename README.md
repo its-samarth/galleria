@@ -1,5 +1,6 @@
 
-![WhatsApp Image 2024-01-31 at 19 45 18](https://github.com/its-samarth/galleria/assets/72015046/c6e7d55a-774e-48dd-9305-ab56b3b55497)
+<img src="https://github.com/its-samarth/galleria/assets/72015046/c6e7d55a-774e-48dd-9305-ab56b3b55497" width="300">
+
 
 ## Overview
 
