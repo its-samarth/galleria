@@ -6,7 +6,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  static ThemeMode themeMode = ThemeMode.dark;
+  static ThemeMode themeMode = ThemeMode.system;
 
   @override
   Widget build(BuildContext context) {
