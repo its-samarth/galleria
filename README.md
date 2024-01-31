@@ -9,6 +9,8 @@ Galleria is an immersive interactive gallery mobile application developed using 
 **Video Explaination link**:https://drive.google.com/drive/u/1/folders/1amVszCPtielg2rHmBaaWdAhTc5Os6jSD
 
 <img src="https://github.com/its-samarth/galleria/assets/72015046/c6e7d55a-774e-48dd-9305-ab56b3b55497" width="300">
+
+
 ## Features
 
 - **Visual Harmony in Grid Design:** Captivating grid layout featuring 16 images with a balanced and pleasing visual effect.
