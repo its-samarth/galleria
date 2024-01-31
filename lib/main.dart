@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false, // Remove debug tag
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.system,
@@ -53,7 +53,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
           IconButton(
             icon: Icon(Icons.brightness_4),
             onPressed: () {
-              // Toggle between light and dark mode
               if (Theme.of(context).brightness == Brightness.light) {
                 ThemeMode.dark;
               } else {
@@ -88,7 +87,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
             child: CachedNetworkImage(
               imageUrl: images[index],
               fit: BoxFit.cover,
-              placeholder: (context, url) => CircularProgressIndicator(),
+              placeholder: (context, url) => LoadingOverlay(),
               errorWidget: (context, url, error) => Icon(Icons.error),
             ),
           );
@@ -123,5 +122,42 @@ class FullScreenGallery extends StatelessWidget {
         pageController: PageController(initialPage: initialIndex),
       ),
     );
+  }
+}
+
+class LoadingOverlay extends StatefulWidget {
+  @override
+  _LoadingOverlayState createState() => _LoadingOverlayState();
+}
+
+class _LoadingOverlayState extends State<LoadingOverlay> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    )..repeat(reverse: true);
+    _animation = Tween<double>(begin: 0.5, end: 1.0).animate(_controller);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      opacity: _animation.value,
+      duration: Duration(milliseconds: 500),
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
