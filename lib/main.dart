@@ -28,16 +28,25 @@ class GalleryScreen extends StatefulWidget {
 
 class _GalleryScreenState extends State<GalleryScreen> {
   List<String> images = [];
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _loadImages();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      _loadImages();
+    }
   }
 
   void _loadImages() {
+    // Increase the number of additional images to load as needed
     List<String> additionalImages = List.generate(
-      100,
+      20,
       (index) => 'https://picsum.photos/id/${images.length + index}/800/1200',
     );
     setState(() {
@@ -70,12 +79,9 @@ class _GalleryScreenState extends State<GalleryScreen> {
           crossAxisSpacing: 4.0,
           mainAxisSpacing: 4.0,
         ),
+        controller: _scrollController,
         itemCount: images.length,
         itemBuilder: (BuildContext context, int index) {
-          if (index == images.length - 1) {
-            _loadImages();
-          }
-
           return GestureDetector(
             onTap: () {
               Navigator.push(
@@ -95,6 +101,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
 
