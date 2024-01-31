@@ -6,14 +6,17 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  static ThemeMode themeMode = ThemeMode.dark;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
+      themeMode: themeMode,
       home: GalleryScreen(),
     );
   }
 }
+

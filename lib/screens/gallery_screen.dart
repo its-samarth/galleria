@@ -4,6 +4,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:galleria/widgets/loading_blur_overlay.dart';
 import 'package:galleria/screens/full_screen_gallery.dart';
+import 'package:galleria/main.dart';
 
 class GalleryScreen extends StatefulWidget {
   @override
@@ -47,10 +48,11 @@ class _GalleryScreenState extends State<GalleryScreen> {
           IconButton(
             icon: Icon(Icons.brightness_4),
             onPressed: () {
+              // Toggle between light and dark mode
               if (Theme.of(context).brightness == Brightness.light) {
-                ThemeMode.dark;
+                 MyApp.themeMode = ThemeMode.dark;
               } else {
-                ThemeMode.light;
+                MyApp.themeMode = ThemeMode.light;
               }
               setState(() {});
             },
