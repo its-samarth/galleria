@@ -1,10 +1,10 @@
 
-<img src="https://github.com/its-samarth/galleria/assets/72015046/c6e7d55a-774e-48dd-9305-ab56b3b55497" width="300">
 
 
 ## Overview
 
 Galleria is an immersive interactive gallery mobile application developed using Flutter. It showcases a visually harmonious grid layout with elegant popups, subtle tap dynamics, infinite scrolling, graceful image placeholders, and whimsical animations. The application is designed to offer a delightful and responsive user experience across various devices.
+**Video Explaination link**:https://drive.google.com/drive/u/1/folders/1amVszCPtielg2rHmBaaWdAhTc5Os6jSD
 
 ## Features
 
@@ -21,6 +21,8 @@ Galleria is an immersive interactive gallery mobile application developed using 
 - **Flutter:** Mobile app development framework.
 - **Dart:** Programming language for application logic.
 - **Picsum API:** Image source for fetching random and high-quality images.
+- 
+<img src="https://github.com/its-samarth/galleria/assets/72015046/c6e7d55a-774e-48dd-9305-ab56b3b55497" width="300">
 
 ## Getting Started
 
