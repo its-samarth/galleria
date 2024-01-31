@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:galleria/widgets/loading_blur_overlay.dart';
+import 'package:galleria/screens/full_screen_gallery.dart';
 
 class GalleryScreen extends StatefulWidget {
   @override
@@ -10,23 +12,25 @@ class GalleryScreen extends StatefulWidget {
 
 class _GalleryScreenState extends State<GalleryScreen> {
   List<String> images = [];
-  late ScrollController scrollController;
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    scrollController = ScrollController();
     _loadImages();
-    scrollController.addListener(() {
-      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
-        _loadImages();
-      }
-    });
+    _scrollController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      _loadImages();
+    }
   }
 
   void _loadImages() {
+    // Increase the number of additional images to load as needed
     List<String> additionalImages = List.generate(
-      100,
+      20,
       (index) => 'https://picsum.photos/id/${images.length + index}/800/1200',
     );
     setState(() {
@@ -37,14 +41,29 @@ class _GalleryScreenState extends State<GalleryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(' Galery')),
+      appBar: AppBar(
+        title: Text('Gallery'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.brightness_4),
+            onPressed: () {
+              if (Theme.of(context).brightness == Brightness.light) {
+                ThemeMode.dark;
+              } else {
+                ThemeMode.light;
+              }
+              setState(() {});
+            },
+          ),
+        ],
+      ),
       body: GridView.builder(
-        controller: scrollController,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+          crossAxisCount: 3,
           crossAxisSpacing: 4.0,
           mainAxisSpacing: 4.0,
         ),
+        controller: _scrollController,
         itemCount: images.length,
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
@@ -59,7 +78,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
             child: CachedNetworkImage(
               imageUrl: images[index],
               fit: BoxFit.cover,
-              placeholder: (context, url) => CircularProgressIndicator(),
+              placeholder: (context, url) => LoadingBlurOverlay(),
               errorWidget: (context, url, error) => Icon(Icons.error),
             ),
           );
@@ -67,39 +86,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
       ),
     );
   }
-}
-
-class FullScreenGallery extends StatelessWidget {
-  final List<String> images;
-  final int initialIndex;
-
-  FullScreenGallery({required this.images, required this.initialIndex});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: PhotoViewGallery.builder(
-        itemCount: images.length,
-        builder: (context, index) {
-          return PhotoViewGalleryPageOptions(
-            imageProvider: NetworkImage(images[index]),
-            minScale: PhotoViewComputedScale.contained,
-            maxScale: PhotoViewComputedScale.covered * 2,
-          );
-        },
-        scrollPhysics: BouncingScrollPhysics(),
-        backgroundDecoration: BoxDecoration(
-          color: Colors.black,
-        ),
-        pageController: PageController(initialPage: initialIndex),
-      ),
-    );
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: GalleryScreen(),
-    debugShowCheckedModeBanner: false,
-  ));
 }
