@@ -1,9 +1,5 @@
-<h1 align="center">Galleria</h1>
 
-<p align="center">
-  ![WhatsApp Image 2024-01-31 at 19 45 18](https://github.com/its-samarth/galleria/assets/72015046/926570da-e4b7-4926-8ec8-8981e1ebce4f)
-
-</p>
+![WhatsApp Image 2024-01-31 at 19 45 18](https://github.com/its-samarth/galleria/assets/72015046/c6e7d55a-774e-48dd-9305-ab56b3b55497)
 
 ## Overview
 
