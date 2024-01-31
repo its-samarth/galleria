@@ -42,6 +42,7 @@ Galleria is an immersive interactive gallery mobile application developed using 
 3.  **Install dependencies**:
 
 	```bash
+ 	flutter create .
 	flutter pub get
 4.  **Run the app**:
 
