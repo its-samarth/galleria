@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'dart:ui';
 
 void main() {
   runApp(MyApp());
@@ -87,7 +88,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
             child: CachedNetworkImage(
               imageUrl: images[index],
               fit: BoxFit.cover,
-              placeholder: (context, url) => LoadingOverlay(),
+              placeholder: (context, url) => LoadingBlurOverlay(),
               errorWidget: (context, url, error) => Icon(Icons.error),
             ),
           );
@@ -125,39 +126,18 @@ class FullScreenGallery extends StatelessWidget {
   }
 }
 
-class LoadingOverlay extends StatefulWidget {
-  @override
-  _LoadingOverlayState createState() => _LoadingOverlayState();
-}
-
-class _LoadingOverlayState extends State<LoadingOverlay> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: Duration(seconds: 1),
-      vsync: this,
-    )..repeat(reverse: true);
-    _animation = Tween<double>(begin: 0.5, end: 1.0).animate(_controller);
-  }
-
+class LoadingBlurOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      opacity: _animation.value,
-      duration: Duration(milliseconds: 500),
-      child: Center(
-        child: CircularProgressIndicator(),
+    return Center(
+      child: Container(
+        width: 40,  // Adjust the width to your preference
+        height: 40, // Adjust the height to your preference
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 }
